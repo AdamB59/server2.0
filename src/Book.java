@@ -5,6 +5,7 @@ public class Book {
     String name;
     int ISBN;
     String author;
+    String hej; 
 
     public Book(String name, int ISBN) {
         this.name = name;
