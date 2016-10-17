@@ -21,11 +21,11 @@ public class Crypter {
 
     public static String xor() {
 
+        // Hard-codet eksempel på en String der krypteres
         String communication = "test123";
-        //Dette er bare et eksempel på en String, der bliver krypteret
 
-        return Crypter.encryptDecryptXOR(communication) + "\n" + Crypter.encryptDecryptXOR(Crypter.encryptDecryptXOR(communication));
-        //Returnerer den krypterede værdi.
+        return Crypter.encryptDecryptXOR(communication) + "\n" + Crypter.encryptDecryptXOR
+                (Crypter.encryptDecryptXOR(communication));
     }
 
 }
