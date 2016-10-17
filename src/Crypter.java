@@ -21,9 +21,10 @@ public class Crypter {
 
     public static String xor() {
 
-        // Hard-codet eksempel på en String der krypteres
+        // Hard-codet eksempel på en streng der krypteres
         String communication = "test123";
 
+        // returnere strengen i krypteret format
         return Crypter.encryptDecryptXOR(communication) + "\n" + Crypter.encryptDecryptXOR
                 (Crypter.encryptDecryptXOR(communication));
     }
