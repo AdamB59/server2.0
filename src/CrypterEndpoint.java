@@ -29,7 +29,7 @@ public class CrypterEndpoint {
     public String xor() {
         return Crypter.xor();
     }
-    
+
     @Path("/getit")
     @GET
     @Produces("text/plain")
