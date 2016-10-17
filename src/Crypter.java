@@ -5,15 +5,16 @@ public class Crypter {
 
 
     private static String encryptDecryptXOR(String input) {
-        char[] key = {'A', 'B', 'C'}; //Dette kan være alle andre bogstaver end a,b og c.
-        StringBuilder output = new StringBuilder();
-        //Opretter en Stringbuilder. En Stringbuilder er ligesom en String,
-        //men kan ændres i metoden, da den bliver betragtet som en Array med mange karakterer
 
+        char[] key = {'A', 'B', 'C'};
+
+        // Opretter en StringBuilder således, at strengen kan modificeres
+        StringBuilder output = new StringBuilder();
+
+        // For loop der scrambler den indtastede streng
         for (int i = 0; i < input.length(); i++) {
             output.append((char) (input.charAt(i) ^ key[i % key.length]));
         }
-        //Dette for-loop sørger for at scramble den String, der er blevet skrevet.
 
         return output.toString();
     }
