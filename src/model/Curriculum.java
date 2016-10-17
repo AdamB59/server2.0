@@ -3,15 +3,15 @@ package model;
 /**
  * Created by magnusrasmussen on 12/10/2016.
  */
-public class Curiculum {
+public class Curriculum {
 
     String school, education;
     int semester;
 
-    public Curiculum(){
+    public Curriculum(){
 
     }
-    public Curiculum(String school, String education, int semester) {
+    public Curriculum(String school, String education, int semester) {
         this.school = school;
         this.education = education;
         this.semester = semester;
@@ -43,7 +43,7 @@ public class Curiculum {
 
     @Override
     public String toString() {
-        return "Curiculum{" +
+        return "Curriculum{" +
                 "school='" + school + '\'' +
                 ", education='" + education + '\'' +
                 ", semester=" + semester +

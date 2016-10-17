@@ -1,6 +1,9 @@
 /**
  * Created by mortenlaursen on 09/10/2016.
  */
+import endpoints.BookEndpoint;
+import endpoints.UsersEndpoint;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;

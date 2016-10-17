@@ -2,16 +2,20 @@ package model;
 
 public class User {
     int id;
-    String name, email, password;
+    String firstName, lastName, email, password;
+    Boolean isAdmin;
 
     public User(){
 
     }
-    public User(int id, String name, String email, String password) {
+
+    public User(int id, String firstName, String lastName, String email, String password, Boolean isAdmin) {
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.isAdmin = isAdmin;
     }
 
     public int getId() {
@@ -22,12 +26,20 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -37,6 +49,7 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
     public String getPassword() {
         return password;
     }
@@ -45,11 +58,19 @@ public class User {
         this.password = password;
     }
 
+    public Boolean getAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        isAdmin = admin;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + firstName + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
