@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Created by mortenlaursen on 17/10/2016.
  */
 public class DBConnector {
-    /**
+    /**+ Config.getDbUrl() + ":" + Config.getDbPort() + "/" + Config.getDbName()
      * Constructor for establishing connection.
      *
      * @throws Exception
