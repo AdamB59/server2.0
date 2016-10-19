@@ -123,7 +123,7 @@ public class DBConnector {
     public boolean editUser(int id, String data) throws SQLException {
         User u = new Gson().fromJson(data,User.class);
         PreparedStatement editUserStatement = conn
-                .prepareStatement("UPDATE Users SET First_Name = ?, Last_Name = ?, Username = ?, Email = ?, Password = ?, Usertype = ? WHERE userID ="+id);
+                .prepareStatement("UPDATE Users SET First_Name = ?, Last_Name = ?, Username = ?, Email = ?, Password = ?, Usertype = ? WHERE userID =?");
 
         try {
             editUserStatement.setString(1, u.getFirstName());
@@ -132,6 +132,7 @@ public class DBConnector {
             editUserStatement.setString(4, u.getEmail());
             editUserStatement.setString(5, u.getPassword());
             editUserStatement.setBoolean(6, u.getUserType());
+            editUserStatement.setInt(7, id);
 
             editUserStatement.executeUpdate();
         } catch (SQLException e) {
@@ -162,7 +163,7 @@ public class DBConnector {
 
     public boolean deleteUser(int id) throws SQLException {
 
-        PreparedStatement deleteUserStatement = conn.prepareStatement("DELETE FROM Users WHERE UserID=?");
+        PreparedStatement deleteUserStatement = conn.prepareStatement("UPDATE Users SET Deleted = 1 WHERE UserID=?");
 
         try {
             deleteUserStatement.setInt(1, id);
@@ -235,7 +236,7 @@ public class DBConnector {
     }
 
     public boolean editCurriculum(int id, String data) throws SQLException {
-        PreparedStatement editCurriculumStatement = conn.prepareStatement("UPDATE Curriculum SET School = ?, Education = ?, Semester = ? WHERE curriculumID = "+id);
+        PreparedStatement editCurriculumStatement = conn.prepareStatement("UPDATE Curriculum SET School = ?, Education = ?, Semester = ? WHERE curriculumID = ?");
 
         Curriculum c = new Gson().fromJson(data,Curriculum.class);
 
@@ -243,6 +244,7 @@ public class DBConnector {
             editCurriculumStatement.setString(1, c.getSchool());
             editCurriculumStatement.setString(2, c.getEducation());
             editCurriculumStatement.setInt(3, c.getSemester());
+            editCurriculumStatement.setInt(4, id);
 
             editCurriculumStatement.executeUpdate();
         } catch (SQLException e) {
@@ -269,7 +271,7 @@ public class DBConnector {
     }
 
     public boolean deleteCurriculum(int id) throws SQLException {
-        PreparedStatement deleteUserStatement = conn.prepareStatement("UPDATE Curriculums SET Deleted = 1 WHERE BookID=?");
+        PreparedStatement deleteUserStatement = conn.prepareStatement("UPDATE Curriculum SET Deleted = 1 WHERE CurriculumID=?");
 
         try {
             deleteUserStatement.setInt(1, id);
@@ -387,7 +389,7 @@ public class DBConnector {
     }
 
     public boolean editBook(int id, String data) throws SQLException {
-        PreparedStatement editBookStatement = conn.prepareStatement("UPDATE Books SET Title = ?, Version = ?, ISBN = ?, PriceAB = ?, PriceSAXO = ?, PriceCDON = ?, Publisher = ?, Author = ? WHERE bookID = " + id);
+        PreparedStatement editBookStatement = conn.prepareStatement("UPDATE Books SET Title = ?, Version = ?, ISBN = ?, PriceAB = ?, PriceSAXO = ?, PriceCDON = ?, Publisher = ?, Author = ? WHERE bookID =?");
         Book b = new Gson().fromJson(data, Book.class);
         try {
             editBookStatement.setString(1, b.getTitle());
@@ -398,6 +400,7 @@ public class DBConnector {
             editBookStatement.setDouble(6, b.getPriceCDON());
             editBookStatement.setString(7, b.getPublisher());
             editBookStatement.setString(8, b.getAuthor());
+            editBookStatement.setInt(9, id);
 
             editBookStatement.executeUpdate();
         } catch (SQLException e) {
@@ -444,17 +447,29 @@ public class DBConnector {
     
 
     public boolean deleteBook(int id) throws SQLException {
-        PreparedStatement deleteUserStatement = conn.prepareStatement("UPDATE Books SET deleted = 1 WHERE BookID = ?; DELETE FROM BooksCurriculum WHERE BookID = ?;");
+        PreparedStatement deleteUserStatement = conn.prepareStatement("UPDATE Books SET Deleted = 1 WHERE BookID = ?");
+        PreparedStatement deleteBooksCurriculumRows = conn.prepareStatement("DELETE FROM BooksCurriculum WHERE BookID = ?");
 
         try {
             deleteUserStatement.setInt(1, id);
             deleteUserStatement.executeUpdate();
+
+            deleteBooksCurriculumRows.setInt(1, id);
+            deleteBooksCurriculumRows.execute();
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return true;
     }
 
-
+    public void close(){
+        try {
+            this.conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

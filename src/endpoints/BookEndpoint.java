@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 // The Java class will be hosted at the URI path "/Book"
 
-@Path("/Book")
+@Path("/book")
 public class BookEndpoint {
     BookController controller = new BookController();
 

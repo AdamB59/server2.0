@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * Created by magnusrasmussen on 17/10/2016.
  */
 //implements IEndpoints HUSK AT ÆNDRE INTERFACET VED PUT
-@Path("/Curriculum")
+@Path("/curriculum")
 public class CurriculumEndpoint {
     CurriculumController curriculumController;
 
@@ -35,7 +35,7 @@ public class CurriculumEndpoint {
      * @throws IllegalAccessException
      */
     @GET
-    @Path("/{curriculumID}/Books")
+    @Path("/{curriculumID}/books")
     @Produces("application/json")
     public Response getCurriculumBooks(@PathParam("curriculumID") int curriculumID) throws IllegalAccessException {
 
@@ -131,7 +131,7 @@ public class CurriculumEndpoint {
 
 
     @POST
-    @Path("/{curriculumID}/Book")
+    @Path("/{curriculumID}/book")
     @Produces("application/json")
     public Response create(@PathParam("curriculumID")int curriculumID, String data) throws Exception {
         if (curriculumController.addCurriculumBook(curriculumID, data)) {
@@ -196,7 +196,7 @@ public class CurriculumEndpoint {
      * @throws SQLException
      */
     @DELETE
-    @Path("/curriculum/{curriculumId}")
+    @Path("/{curriculumId}")
     @Produces("application/json")
     public Response delete(@PathParam("curriculumId") int id) throws SQLException {
         if(curriculumController.deleteCurriculum(id)) {

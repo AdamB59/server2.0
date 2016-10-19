@@ -11,7 +11,7 @@ import javax.ws.rs.core.Response;
 import java.sql.SQLException;
 
 // implements IEndpoints The Java class will be hosted at the URI path "/users"
-@Path("/users")
+@Path("/user")
 public class UsersEndpoint  {
     UserController controller = new UserController();
 
@@ -20,7 +20,7 @@ public class UsersEndpoint  {
 
     @GET
     // The Java method will produce content identified by the MIME Media type "text/plain"
-    @Produces("text/plain")
+    @Produces("application/json")
     public Response get() {
         if (controller.getUsers() != null) {
             return Response
