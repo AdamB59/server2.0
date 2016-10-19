@@ -2,10 +2,11 @@
  * Created by mortenlaursen on 09/10/2016.
  */
 
+import endpoints.HashingEndpoint;
 import com.google.gson.Gson;
 import config.Config;
 import config.ConfigMap;
-import Encrypters.CrypterEndpoint;
+import endpoints.CrypterEndpoint;
 import endpoints.BookEndpoint;
 import endpoints.CurriculumEndpoint;
 import endpoints.UsersEndpoint;

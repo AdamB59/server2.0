@@ -9,25 +9,31 @@ import java.util.ArrayList;
 public class BookController {
 
     public ArrayList<Book> getBooks() throws Exception {
-
         DBConnector db = new DBConnector();
-
-        return db.getBooks();
+        ArrayList<Book> books = db.getBooks();
+        db.close();
+        return books;
     }
 
     public Book getBook(int id) throws Exception {
         DBConnector db = new DBConnector();
-        return db.getBook(id);
+        Book book = db.getBook(id);
+        db.close();
+        return book;
     }
 
     public boolean editBook(int id, String data) throws Exception {
         DBConnector db = new DBConnector();
-        return db.editBook(id, data);
+        boolean editBook = db.editBook(id, data);
+        db.close();
+        return editBook;
     }
 
     public boolean deleteBook(int id) throws Exception {
         DBConnector db = new DBConnector();
-        return db.deleteBook(id);
+        boolean deleteBook = db.deleteBook(id);
+        db.close();
+        return deleteBook;
     }
 
    /* public boolean addBook(String data) throws Exception {

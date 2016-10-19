@@ -3,8 +3,10 @@ package endpoints; /**
  */
 
 import com.google.gson.Gson;
+import controllers.TokenController;
 import controllers.UserController;
 import database.DBConnector;
+import model.UserLogin;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -14,6 +16,7 @@ import java.sql.SQLException;
 @Path("/user")
 public class UsersEndpoint  {
     UserController controller = new UserController();
+    TokenController tokenController = new TokenController();
 
     public UsersEndpoint() {
     }
@@ -27,8 +30,7 @@ public class UsersEndpoint  {
                     .status(200)
                     .entity(new Gson().toJson(controller.getUsers()))
                     .build();
-        }
-        else {
+        } else {
             return Response
                     //error response
                     .status(400)
@@ -98,5 +100,26 @@ public class UsersEndpoint  {
         }
         else return Response.status(400).entity("{\"message\":\"failed\"}").build();
     }
+
+    @POST
+    @Path("/login")
+    @Produces("application/json")
+    public Response login(String data) throws SQLException {
+
+        UserLogin userLogin = new Gson().fromJson(data, UserLogin.class);
+
+        String token = tokenController.authenticate(userLogin.getUsername(), userLogin.getPassword());
+
+        if (token != null) {
+            //demo to check if it returns this on post.
+            return Response
+                .status(200)
+                .entity(new Gson().toJson(token))
+                .build();
+        } else return Response
+            .status(401)
+            .build();
+    }
+
 }
 
