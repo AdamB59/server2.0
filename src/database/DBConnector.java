@@ -101,7 +101,7 @@ public class DBConnector {
             PreparedStatement getUser = conn.prepareStatement("SELECT * FROM Users WHERE UserID=?");
             getUser.setInt(1, id);
             resultSet = getUser.executeQuery();
-            resultSet.next();
+
 
             while (resultSet.next()) {
                 try {

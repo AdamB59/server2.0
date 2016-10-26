@@ -35,7 +35,7 @@ public class UsersEndpoint  {
             return Response
                     //error response
                     .status(400)
-                    .entity("{\"message\":\"failed\"}")
+                    .entity("{\"message\":\"failed!\"}")
                     .build();
         }
     }
@@ -49,8 +49,7 @@ public class UsersEndpoint  {
                     .status(200)
                     .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(controller.getUser(userId)))))
                     .build();
-        }
-        return Response
+        } else return Response
                 .status(400)
                 .entity("{\"message\":\"failed\"}")
                 .build();
@@ -92,6 +91,7 @@ public class UsersEndpoint  {
             return Response
                     .status(200)
                     .entity("{\"message\":\"Success! User added\"}")
+
                     .build();
         }
         else return Response.status(400).entity("{\"message\":\"failed\"}").build();
