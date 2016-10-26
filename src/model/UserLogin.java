@@ -1,5 +1,10 @@
 package model;
 
+/**
+ * Denne klasse er oprettet med formålet om at kunne modtage et Gson-objekt, og herefter dele det op i username og password,
+ * så det kan læses af IntelliJ.
+ */
+
 public class UserLogin {
 
     private String username;
