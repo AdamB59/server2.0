@@ -250,3 +250,4 @@ public class CurriculumEndpoint {
         }else return Response.status(400).entity("{\"message\":\"failed\"}").build();
     }
 }
+//test
