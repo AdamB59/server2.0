@@ -1,4 +1,4 @@
-## Git Rules
+ ## Git Rules
 
 * **Aldrig push til masterbranch medmindre programmet virker og er godkendt af releasemanageren**
 * Gør brug af **branches** til at kode og teste uden at påvirke masterbranch. **Mere om git og branches:** https://www.jetbrains.com/help/idea/2016.2/managing-branches.html

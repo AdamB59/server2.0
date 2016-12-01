@@ -10,10 +10,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.sql.SQLException;
 
-
-/**
- * Created by magnusrasmussen on 17/10/2016.
- */
 //implements IEndpoints HUSK AT ÆNDRE INTERFACET VED PUT
 @Path("/curriculum")
 public class CurriculumEndpoint {
@@ -27,9 +23,8 @@ public class CurriculumEndpoint {
         curriculumController = new CurriculumController();
     }
 
-
     /**
-     * Metode til at hente alle bøgerne på et semester
+     * Metode til at hente alle bøgerne fra et bestemt semester
      * @param curriculumID
      * @return
      * @throws IllegalAccessException
@@ -38,22 +33,53 @@ public class CurriculumEndpoint {
     @Path("/{curriculumID}/books")
     @Produces("application/json")
     public Response getCurriculumBooks(@PathParam("curriculumID") int curriculumID) throws IllegalAccessException {
+        {
 
-        if (curriculumController.getCurriculum(curriculumID) != null) {
-            return Response
-                    .status(200)
-                    .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(curriculumController.getCurriculumBooks(curriculumID)))))
-                    .header("Access-Control-Allow-Origin", "*") //Skal måske være der
-                    .build(); //kør
-        } else {
-            return Response
-                //error response
-                .status(400)
-                .entity("{\"message\":\"failed\"}")
-                .build();
-    }
+            if (curriculumController.getCurriculum(curriculumID) != null) {
+                System.out.println(curriculumID);
+                return Response
+                        .status(200)
+                        //.entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(curriculumController.getCurriculumBooks(curriculumID)))))
+                        .entity(new Gson().toJson(curriculumController.getCurriculumBooks(curriculumID)))
+                        .build(); //kør
+            } else {
+                return Response
+                        //error response
+                        .status(400)
+                        .entity("{\"message\":\"failed\"}")
+                        .build();
+            }
+        }
     }
 
+    /**
+     * Metode til at hente alle bøgerne fra et bestemt semester
+     * @param
+     * @return
+     * @throws IllegalAccessException
+     */
+    @GET
+    @Path("/{Education}&{Semester}")
+    @Produces("application/json")
+    public Response getCurriculumByValues(@PathParam("Education") String education, @PathParam("Semester") int semester) throws IllegalAccessException {
+        {
+
+            if (curriculumController.getCurriculumByValues(education, semester) != null) {
+                //System.out.println(curriculumID);
+                return Response
+                        .status(200)
+                        //.entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(curriculumController.getCurriculumBooks(curriculumID)))))
+                        .entity(new Gson().toJson(curriculumController.getCurriculumByValues(education, semester)))
+                        .build(); //kør
+            } else {
+                return Response
+                        //error response
+                        .status(400)
+                        .entity("{\"message\":\"failed\"}")
+                        .build();
+            }
+        }
+    }
     /**
      * Metode til at hente alle semestre
      * @return
@@ -66,8 +92,8 @@ public class CurriculumEndpoint {
         if (curriculumController.getCurriculums() != null) {
             return Response
                     .status(200)
-                    .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(curriculumController.getCurriculums()))))
-                    .header("Access-Control-Allow-Origin", "*") //Skal måske være der
+                    //.entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(curriculumController.getCurriculums()))))
+                    .entity(new Gson().toJson(curriculumController.getCurriculums()))
                     .build(); //kør
         } else {
             return Response
@@ -93,8 +119,8 @@ public class CurriculumEndpoint {
         if (curriculumController.getCurriculums() != null) {
             return Response
                     .status(200)
-                    .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(curriculumController.getCurriculum(id)))))
-                    .header("Access-Control-Allow-Origin", "*") //Skal måske være der
+                    // .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(curriculumController.getCurriculum(id)))))
+                    .entity(new Gson().toJson(curriculumController.getCurriculum(id)))
                     .build(); //kør
         } else {
             return Response
@@ -123,7 +149,8 @@ public class CurriculumEndpoint {
                     .status(200)
                     //nedenstående skal formentlig laves om. Den skal ikke returne curriculums. Lavet for at checke
                     //at den skriver til db.
-                    .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(curriculumController.getCurriculums()))))
+                    //.entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(curriculumController.getCurriculums()))))
+                    .entity(new Gson().toJson(curriculumController.getCurriculums()))
                     .build();
         }
         else return Response

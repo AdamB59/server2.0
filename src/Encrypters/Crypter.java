@@ -1,30 +1,26 @@
 package Encrypters;
 
-/**
- * Created by Tastum on 17/10/2016.
- */
-
 import java.util.Random;
 
 public class Crypter {
 
 
     public static String encryptDecryptXOR(String input) {
-        char[] key = {'A', 'B', 'C'}; //Dette kan være alle andre bogstaver end a,b og c.
+        char[] key = {'A', 'L', 'Z'}; //Dette kan være alle andre bogstaver end a,b og c.
         StringBuilder output = new StringBuilder();
 
         //For loop der scrambler den String, der bliver indtastet
-        for (int i = 0; i < input.length(); i++) {
+         for (int i = 0; i < input.length(); i++) {
             output.append((char) (input.charAt(i) ^ key[i % key.length]));
         }
 
         return output.toString();
-    }
+     }
 
-    public static String xor() {
+     public static String xor() {
 
         //Eksempel på en hard-codet String, der bliver krypteret
-        String communication = "test123";
+         String communication = "test123";
 
         // Returnerer den krypterede værdi.
         return Crypter.encryptDecryptXOR(communication) + "\n" + Crypter.encryptDecryptXOR
@@ -39,6 +35,6 @@ public class Crypter {
             buf.append(chars.charAt(rand.nextInt(chars.length())));
         }
         return buf.toString();
-    }
+     }
 
-}
+ }

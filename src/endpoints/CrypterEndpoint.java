@@ -1,6 +1,4 @@
-package endpoints; /**
- * Created by madsgade on 17/10/2016.
- */
+package endpoints;
 
 import Encrypters.*;
 import com.google.gson.Gson;

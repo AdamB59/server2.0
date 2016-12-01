@@ -29,6 +29,13 @@ public class CurriculumController {
         return curriculum;
     }
 
+    public ArrayList<Book> getCurriculumByValues(String udd, int semester) {
+        DBConnector db = new DBConnector();
+        ArrayList<Book> curriculum = db.getCurriculumByValues(udd, semester);
+        db.close();
+        return curriculum;
+    }
+
     public boolean editCurriculum(int id, String data) throws SQLException {
         DBConnector db = new DBConnector();
         boolean editCurriculum = db.editCurriculum(id, data);
@@ -50,7 +57,7 @@ public class CurriculumController {
         db.close();
         return addCurriculum;
     }
-    // Stavefejl - Rettet fra curricilum til curriculum
+    
     public ArrayList<Book> getCurriculumBooks(int curriculumID) {
         DBConnector db = new DBConnector();
         ArrayList<Book> curriculumBooks = db.getCurriculumBooks(curriculumID);

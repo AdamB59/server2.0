@@ -1,6 +1,4 @@
-package endpoints; /**
- * Created by mortenlaursen on 09/10/2016.
- */
+package endpoints;
 
 import com.google.gson.Gson;
 import controllers.BookController;
@@ -44,7 +42,12 @@ public class BookEndpoint {
         if (controller.getBooks()!=null) {
             return Response
                     .status(200)
-                    .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(controller.getBooks()))))
+
+                    .header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT")
+                    .header("Access-Control-Max-Age", "3600")
+                    .header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+                    // .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(controller.getBooks()))))
+                    .entity(new Gson().toJson(controller.getBooks()))
                     .build();
         }
         else {
@@ -68,7 +71,8 @@ public class BookEndpoint {
         if (controller.getBook(bookId)!=null) {
             return Response
                     .status(200)
-                    .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(controller.getBook(bookId)))))
+                    // .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(controller.getBook(bookId)))))
+                    .entity(new Gson().toJson(controller.getBook(bookId)))
                     .build();
         }
         else {
@@ -102,7 +106,7 @@ public class BookEndpoint {
             if (controller.getBook(id) != null) {
                 String s = new Gson().fromJson(data,String.class);
                 String decrypt = Crypter.encryptDecryptXOR(s);
-                if (controller.editBook(id, decrypt)) {
+                 if (controller.editBook(id, decrypt)) {
                     return Response
                             .status(200)
                             .entity("{\"message\":\"Success! Book edited\"}")

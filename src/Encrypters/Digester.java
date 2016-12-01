@@ -2,10 +2,6 @@ package Encrypters;
 
 import java.security.MessageDigest;
 
-/**
- * Created by madsgade on 17/10/2016.
- */
-
 public class Digester {
     private final static String SALT = "82efbcc2cc33d33cdadf12806d75591a";
     private static MessageDigest digester;

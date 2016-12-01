@@ -9,9 +9,6 @@ import model.User;
 import java.sql.*;
 import java.util.ArrayList;
 
-/**
- * Created by mortenlaursen on 17/10/2016.
- */
 public class DBConnector {
     /**
      * Constructor for establishing connection.
@@ -20,11 +17,11 @@ public class DBConnector {
      */
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://" + Config.getDbUrl() + ":" + Config.getDbPort() + "/" + Config.getDbName();
+    static final String DB_URL = "jdbc:mysql://localhost:3306/bookit"; // + Config.getDbUrl() + ":" + Config.getDbPort() + "/" + Config.getDbName();
 
     //  Database credentials
-    static final String USER = Config.getDbUserName();
-    static final String PASS = Config.getDbPassword();
+    static final String USER = "root";//Config.getDbUserName();
+    static final String PASS = "letmein";//Config.getDbPassword();
 
     //String sql; Not needed anymore after introducing prepared statements.
     Connection conn = null;
@@ -247,6 +244,45 @@ public class DBConnector {
 
     }
 
+    public ArrayList<Book> getCurriculumByValues(String udd, int semester) throws IllegalArgumentException {
+        ResultSet resultSet = null;
+        Curriculum curriculum = null;
+        int result = 1;
+        ArrayList<Book> list = new ArrayList();
+        //System.out.println("UDDAN: " + udd);
+        //System.out.println("Semes: " + semester);
+        try {
+            PreparedStatement getCurriculum = conn.prepareStatement("SELECT CurriculumId FROM Curriculum WHERE Education = " + udd + " and Semester = " + semester);
+            //getCurriculum.setInt(1, curriculumID);
+            resultSet = getCurriculum.executeQuery();
+
+            while (resultSet.next()) {
+                try {
+
+                    result =
+                            resultSet.getInt("CurriculumID")
+                            //resultSet.getString("School"),
+                            //resultSet.getString("Education"),
+                            //resultSet.getInt("Semester")
+                    ;
+
+                } catch (Exception e) {
+
+                }
+            }
+
+        } catch (SQLException sqlException) {
+
+            System.out.println(sqlException.getMessage());
+        }
+
+        list = getCurriculumBooks(result);
+
+
+        return list;
+
+    }
+
     public boolean editCurriculum(int id, String data) throws SQLException {
         PreparedStatement editCurriculumStatement = conn.prepareStatement("UPDATE Curriculum SET School = ?, Education = ?, Semester = ? WHERE curriculumID = ?");
 
@@ -294,14 +330,13 @@ public class DBConnector {
         return true;
     }
 
-    //skal skiftes
     public ArrayList<Book> getCurriculumBooks(int curriculumID) {
         ArrayList results = new ArrayList();
         ResultSet resultSet = null;
 
 
         try {
-            PreparedStatement getCurriculumBooks = conn.prepareStatement("SELECT * FROM Books INNER JOIN BooksCurriculum ON Books.BookID=BooksCurriculum.BookID WHERE CurriculumID = ? ");
+            PreparedStatement getCurriculumBooks = conn.prepareStatement("SELECT * FROM Books INNER JOIN BooksCurriculum ON Books.BookID=BooksCurriculum.BookID WHERE CurriculumID = ?");
             getCurriculumBooks.setInt(1, curriculumID);
             resultSet = getCurriculumBooks.executeQuery();
 
@@ -534,6 +569,9 @@ public class DBConnector {
     }
 
     public void addToken(String token, int userId) {
+
+        System.out.print("token:" + token);
+        System.out.print("userId:" + userId);
 
         PreparedStatement addTokenStatement;
         try {

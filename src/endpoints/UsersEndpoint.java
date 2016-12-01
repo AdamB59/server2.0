@@ -1,6 +1,4 @@
-package endpoints; /**
- * Created by mortenlaursen on 09/10/2016.
- */
+package endpoints;
 
 import Encrypters.*;
 import com.google.gson.Gson;
@@ -34,7 +32,11 @@ public class UsersEndpoint  {
             if (controller.getUsers() != null) {
                 return Response
                         .status(200)
-                        .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(controller.getUsers()))))
+                        .header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT")
+                        .header("Access-Control-Max-Age", "3600")
+                        .header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+                       // .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(controller.getUsers()))))
+                        .entity(new Gson().toJson(controller.getUsers()))
                         .build();
             } else {
                 return Response
@@ -46,7 +48,7 @@ public class UsersEndpoint  {
         }else return Response.status(400).entity("{\"message\":\"failed\"}").build();
 
     }
-
+    
     @Path("/{id}")
     @Produces("application/json")
     @GET
@@ -142,8 +144,8 @@ public class UsersEndpoint  {
     @Path("/login")
     @Produces("application/json")
     public Response login(String data) throws SQLException {
-        String decrypt = Crypter.encryptDecryptXOR(data); //Fjernes når din klient krypterer.
-        decrypt = Crypter.encryptDecryptXOR(decrypt);
+        //String decrypt = Crypter.encryptDecryptXOR(data); //Fjernes når din klient krypterer.
+        String decrypt = data;
 
         UserLogin userLogin = new Gson().fromJson(decrypt, UserLogin.class);
 

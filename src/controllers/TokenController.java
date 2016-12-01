@@ -21,6 +21,7 @@ public class TokenController {
         String token;
 
         User foundUser = db.authenticate(username, password);
+        System.out.print("user:" + foundUser);
         if (foundUser != null) {
 
             token = Crypter.buildToken("abcdefghijklmnopqrstuvxyz1234567890@&%!?", 25);

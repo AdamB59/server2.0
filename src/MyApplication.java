@@ -11,6 +11,7 @@ import endpoints.BookEndpoint;
 import endpoints.CurriculumEndpoint;
 import endpoints.UsersEndpoint;
 import model.Curriculum;
+import endpoints.CORSFilter;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.GET;
@@ -45,6 +46,7 @@ public class MyApplication extends Application {
     this.initConfig();
 
     HashSet h = new HashSet<Class<?>>();
+    h.add(CORSFilter.class);
     h.add(UsersEndpoint.class);
     h.add(BookEndpoint.class);
     h.add(CurriculumEndpoint.class);
