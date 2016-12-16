@@ -74,7 +74,7 @@ public class DBConnector {
                             resultSet.getString("Username"),
                             resultSet.getString("Email"),
                             resultSet.getString("Password"),
-                            resultSet.getBoolean("Usertype")
+                            resultSet.getInt("UserType")
                     );
 
                     results.add(users);
@@ -110,14 +110,13 @@ public class DBConnector {
                             resultSet.getString("Username"),
                             resultSet.getString("Email"),
                             resultSet.getString("Password"),
-                            resultSet.getBoolean("Usertype")
+                            resultSet.getInt("Usertype")
                     );
 
                 } catch (Exception e) {
 
                 }
             }
-
 
         } catch (SQLException sqlException) {
             System.out.println(sqlException.getMessage());
@@ -135,7 +134,7 @@ public class DBConnector {
             editUserStatement.setString(2, u.getLastName());
             editUserStatement.setString(3, u.getUsername());
             editUserStatement.setString(4, u.getEmail());
-            editUserStatement.setBoolean(5, u.getUserType());
+            editUserStatement.setInt(5, u.getUserType());
             editUserStatement.setInt(6, id);
 
             editUserStatement.executeUpdate();
@@ -156,7 +155,7 @@ public class DBConnector {
             addUserStatement.setString(3, u.getUsername());
             addUserStatement.setString(4, u.getEmail());
             addUserStatement.setString(5, u.getPassword());
-            addUserStatement.setBoolean(6, u.getUserType());
+            addUserStatement.setBoolean(6, false);
 
             addUserStatement.execute();
         } catch (SQLException e) {
@@ -277,7 +276,6 @@ public class DBConnector {
         }
 
         list = getCurriculumBooks(result);
-
 
         return list;
 
@@ -558,7 +556,7 @@ public class DBConnector {
                 userFromToken = new User();
 
                 userFromToken.setUserID(resultSet.getInt("user_id"));
-                userFromToken.setUserType(resultSet.getBoolean("Usertype"));
+                userFromToken.setUserType(resultSet.getInt("Usertype"));
 
             }
         } catch (SQLException sqlException) {

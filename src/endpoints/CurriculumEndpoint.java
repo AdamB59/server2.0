@@ -24,7 +24,7 @@ public class CurriculumEndpoint {
     }
 
     /**
-     * Metode til at hente alle bøgerne fra et bestemt semester
+     * Metode til at hente alle bøgerne fra et bestemt semester // må være denne metode?
      * @param curriculumID
      * @return
      * @throws IllegalAccessException
@@ -32,15 +32,15 @@ public class CurriculumEndpoint {
     @GET
     @Path("/{curriculumID}/books")
     @Produces("application/json")
-    public Response getCurriculumBooks(@PathParam("curriculumID") int curriculumID) throws IllegalAccessException {
+    public Response getCurriculumBooks(@HeaderParam("authorization") String authToken, @PathParam("curriculumID") int curriculumID) throws IllegalAccessException {
         {
 
             if (curriculumController.getCurriculum(curriculumID) != null) {
                 System.out.println(curriculumID);
                 return Response
                         .status(200)
-                        //.entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(curriculumController.getCurriculumBooks(curriculumID)))))
-                        .entity(new Gson().toJson(curriculumController.getCurriculumBooks(curriculumID)))
+                        .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(curriculumController.getCurriculumBooks(curriculumID)),authToken)))
+//                        .entity(new Gson().toJson(curriculumController.getCurriculumBooks(curriculumID)))
                         .build(); //kør
             } else {
                 return Response
@@ -59,17 +59,17 @@ public class CurriculumEndpoint {
      * @throws IllegalAccessException
      */
     @GET
-    @Path("/{Education}&{Semester}")
+    @Path("/{Education}&{Semester}") // her tror jeg
     @Produces("application/json")
-    public Response getCurriculumByValues(@PathParam("Education") String education, @PathParam("Semester") int semester) throws IllegalAccessException {
+    public Response getCurriculumByValues(@HeaderParam("authorization") String authToken, @PathParam("Education") String education, @PathParam("Semester") int semester) throws IllegalAccessException {
         {
 
             if (curriculumController.getCurriculumByValues(education, semester) != null) {
                 //System.out.println(curriculumID);
                 return Response
                         .status(200)
-                        //.entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(curriculumController.getCurriculumBooks(curriculumID)))))
-                        .entity(new Gson().toJson(curriculumController.getCurriculumByValues(education, semester)))
+                        .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(curriculumController.getCurriculumByValues(education, semester)),authToken)))
+//                        .entity(new Gson().toJson(curriculumController.getCurriculumByValues(education, semester)))
                         .build(); //kør
             } else {
                 return Response
@@ -87,13 +87,13 @@ public class CurriculumEndpoint {
      */
     @GET
     @Produces("application/json")
-    public Response get() throws IllegalAccessException {
+    public Response get(@HeaderParam("authorization") String authToken) throws IllegalAccessException {
 
         if (curriculumController.getCurriculums() != null) {
             return Response
                     .status(200)
-                    //.entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(curriculumController.getCurriculums()))))
-                    .entity(new Gson().toJson(curriculumController.getCurriculums()))
+                    .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(curriculumController.getCurriculums()),authToken)))
+//                    .entity(new Gson().toJson(curriculumController.getCurriculums()))
                     .build(); //kør
         } else {
             return Response
@@ -113,14 +113,14 @@ public class CurriculumEndpoint {
     @GET
     @Path("/{curriculumID}")
     @Produces("application/json")
-    public Response get(@PathParam("curriculumID") int id) throws IllegalAccessException {
+    public Response get(@HeaderParam("authorization") String authToken, @PathParam("curriculumID") int id) throws IllegalAccessException {
 
 
         if (curriculumController.getCurriculums() != null) {
             return Response
                     .status(200)
-                    // .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(curriculumController.getCurriculum(id)))))
-                    .entity(new Gson().toJson(curriculumController.getCurriculum(id)))
+                     .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(curriculumController.getCurriculum(id)),authToken)))
+//                    .entity(new Gson().toJson(curriculumController.getCurriculum(id)))
                     .build(); //kør
         } else {
             return Response
@@ -142,7 +142,7 @@ public class CurriculumEndpoint {
     @Produces("application/json")
     public Response create(String data) throws Exception {
         String s = new Gson().fromJson(data,String.class);
-        String decrypt = Crypter.encryptDecryptXOR(s);
+        String decrypt = Crypter.encryptDecryptXOR(s, "");
         if (curriculumController.addCurriculum(decrypt)) {
             //demo to check if it returns this on post.
             return Response
@@ -169,7 +169,7 @@ public class CurriculumEndpoint {
 
         if (user != null){
             String s = new Gson().fromJson(data,String.class);
-            String decrypt = Crypter.encryptDecryptXOR(s);
+            String decrypt = Crypter.encryptDecryptXOR(s, "token gores here");
             if (curriculumController.addCurriculumBook(curriculumID, decrypt)) {
                 return Response
                         .status(200)
@@ -196,13 +196,14 @@ public class CurriculumEndpoint {
     @Produces("application/json")
 
     public Response edit(@HeaderParam("authorization") String authToken, @PathParam("curriculumID") int id, String data) throws SQLException {
-
+    // token sendes med request fra klienten => serveren læser token fra HeaderParam => validere brugerens token =>  kryptere eller decryptere
         User user = tokenController.getUserFromTokens(authToken);
 
         if (user != null){
             if (curriculumController.getCurriculum(id)!=null) {
                 String s = new Gson().fromJson(data,String.class);
-                String decrypt = Crypter.encryptDecryptXOR(s);
+
+                String decrypt = Crypter.encryptDecryptXOR(s, authToken);
                 if (curriculumController.editCurriculum(id, decrypt)) {
                     return Response
                             .status(200)

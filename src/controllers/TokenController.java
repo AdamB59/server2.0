@@ -24,9 +24,11 @@ public class TokenController {
         System.out.print("user:" + foundUser);
         if (foundUser != null) {
 
-            token = Crypter.buildToken("abcdefghijklmnopqrstuvxyz1234567890@&%!?", 25);
-
+            // nedenstående tal bestemmer hvor lang token skal være.
+            token = Crypter.buildToken("abcdefghijklmnopqrstuvxyz1234567890@&%!?", 50);
             db.addToken(token, foundUser.getUserID());
+            // Fra det brugernavn og adgangskode der bliver indtastet hos klienten,
+            // der regner den ud hvilket ID brugeren har, og så genereres der en token til den tilhørende brugerID.
 
         } else {
             token = null;

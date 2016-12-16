@@ -28,15 +28,15 @@ public class UsersEndpoint  {
 
         User user = tokenController.getUserFromTokens(authToken);
 
-        if (user != null){
+        if (user != null && user.getUserType() == 1){
             if (controller.getUsers() != null) {
                 return Response
                         .status(200)
                         .header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT")
                         .header("Access-Control-Max-Age", "3600")
                         .header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-                       // .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(controller.getUsers()))))
-                        .entity(new Gson().toJson(controller.getUsers()))
+                        .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(controller.getUsers()),authToken)))
+//                      .entity(new Gson().toJson(controller.getUsers()))
                         .build();
             } else {
                 return Response
@@ -60,7 +60,8 @@ public class UsersEndpoint  {
             if (controller.getUser(userId)!=null) {
                 return Response
                         .status(200)
-                        .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(controller.getUser(userId)))))
+                        .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(controller.getUser(userId)),authToken)))
+//                        .entity(new Gson().toJson(controller.getUser(userId)))
                         .build();
             }
             return Response
@@ -83,10 +84,10 @@ public class UsersEndpoint  {
         User user = tokenController.getUserFromTokens(authToken);
 
         if (user != null){
-            String s = new Gson().fromJson(data,String.class);
-            String decrypt = Crypter.encryptDecryptXOR(s);
+//            String s = new Gson().fromJson(data,String.class);
+//            String decrypt = Crypter.encryptDecryptXOR(s, authToken);
             if (controller.getUser(id) != null) {
-                if (controller.editUser(id, decrypt)) {
+                if (controller.editUser(id, data)) {
                     return Response
                             .status(200)
                             .entity("{\"message\":\"Success! User edited\"}")
@@ -112,9 +113,9 @@ public class UsersEndpoint  {
     @POST
     @Produces("application/json")
     public Response create(String data) throws Exception {
-        String s = new Gson().fromJson(data,String.class);
-        String decrypt = Crypter.encryptDecryptXOR(s);
-        if (controller.addUser(decrypt)) {
+//        String s = new Gson().fromJson(data,String.class);
+//        String decrypt = Crypter.encryptDecryptXOR(s, authToken);
+        if (controller.addUser(data)) {
             //demo to check if it returns this on post.
             return Response
                     .status(200)
@@ -144,11 +145,10 @@ public class UsersEndpoint  {
     @Path("/login")
     @Produces("application/json")
     public Response login(String data) throws SQLException {
-        //String decrypt = Crypter.encryptDecryptXOR(data); //Fjernes når din klient krypterer.
+        //String decrypt = Crypter.encryptDecryptXOR(data);
         String decrypt = data;
 
         UserLogin userLogin = new Gson().fromJson(decrypt, UserLogin.class);
-
         String token = tokenController.authenticate(userLogin.getUsername(), userLogin.getPassword());
 
         if (token != null) {

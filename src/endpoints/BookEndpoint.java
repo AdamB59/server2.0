@@ -35,9 +35,12 @@ public class BookEndpoint {
      */
     @GET
     @Produces("application/json")
-    public Response get() throws Exception {
+    public Response get(@HeaderParam("authorization") String authToken) throws Exception {
 
 
+        User user = tokenController.getUserFromTokens(authToken);
+
+        if (user != null){
 
         if (controller.getBooks()!=null) {
             return Response
@@ -46,8 +49,8 @@ public class BookEndpoint {
                     .header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT")
                     .header("Access-Control-Max-Age", "3600")
                     .header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-                    // .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(controller.getBooks()))))
-                    .entity(new Gson().toJson(controller.getBooks()))
+                    .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(controller.getBooks()), authToken)))
+//                  .entity(new Gson().toJson(controller.getBooks()))
                     .build();
         }
         else {
@@ -56,7 +59,9 @@ public class BookEndpoint {
                     .entity("{\"message\":\"failed\"}")
                     .build();
         }
-    }
+            }else return Response.status(400).entity("{\"message\":\"failed\"}").build();
+
+        }
 
     /**
      * Denne metode bruges til at hente data om en enkelt bog.
@@ -67,17 +72,20 @@ public class BookEndpoint {
     @Path("/{id}")
     @Produces("application/json")
     @GET
-    public Response get(@PathParam("id") int bookId) throws Exception {
+    public Response get(@HeaderParam("authorization") String authToken, @PathParam("id") int bookId) throws Exception {
+
+        User user = tokenController.getUserFromTokens(authToken);
+
         if (controller.getBook(bookId)!=null) {
             return Response
                     .status(200)
-                    // .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(controller.getBook(bookId)))))
-                    .entity(new Gson().toJson(controller.getBook(bookId)))
+                    .entity(new Gson().toJson(Crypter.encryptDecryptXOR(new Gson().toJson(controller.getBook(bookId)), authToken)))
+//                  .entity(new Gson().toJson(controller.getBook(bookId)))
                     .build();
         }
         else {
             return Response
-                    .status(400)
+                    .status(403)
                     .entity("{\"message\":\"failed\"}")
                     .build();
         }
@@ -87,10 +95,10 @@ public class BookEndpoint {
      * Denne metode gør det muligt for klienten at ændre værdier på en bog (login er nødvendigt).
      * Det er en PUT-metode, hvilket betyder at den modtager et input fra klienten.
      * Metoden modtager også diverse parametre.
-     * @param authToken dette parameter tjekker om klienten sender en access-token (om brugeren er verificeret).
+     * @param authToken dette parameter tjekker om klienten sender en access-token (om brugeren er bekræftet).
      * @param id Tjekker id, for at vide hvilken bog, der skal ændres.
      * @param data modtager data om hvad der skal ændres.
-     * @return Returner også status 200 eller 400 (med fejlbeskeder)
+     * @return Returner også status 200 eller 403 (du har ikke adgang (not authrozied), 400 (bad request) (med fejlbeskeder)
      * @throws Exception
      */
     @PUT
@@ -101,12 +109,12 @@ public class BookEndpoint {
 
         User user = tokenController.getUserFromTokens(authToken);
 
-        if (user != null){
+        if (user != null && user.getUserType() == 1){
 
             if (controller.getBook(id) != null) {
-                String s = new Gson().fromJson(data,String.class);
-                String decrypt = Crypter.encryptDecryptXOR(s);
-                 if (controller.editBook(id, decrypt)) {
+//               String s = new Gson().fromJson(data,String.class);
+//               String decrypted = new Gson().fromJson(Crypter.encryptDecryptXOR(data, authToken),String.class);
+                 if (controller.editBook(id, data)) {
                     return Response
                             .status(200)
                             .entity("{\"message\":\"Success! Book edited\"}")
@@ -119,16 +127,14 @@ public class BookEndpoint {
                 }
             } else {
                 return Response
-                        .status(400)
+                        .status(403)
                         .entity("{\"message\":\"failed. Book not found\"}")
                         .build();
             }
 
-        }else return Response.status(400).entity("{\"message\":\"failed\"}").build();
-
+        }else return Response.status(403).entity("{\"message\":\"failed\"}").build();
 
     }
-
  /*  @POST
     @Produces("application/json")
     public Response create(String data) throws Exception {
@@ -146,7 +152,6 @@ public class BookEndpoint {
         }
     }
 */
-
     /**
      * Gør det muligt for klienten at slette eksisterende bøger
      * @param authToken Tjekker om klienten sender en access-token med request.
@@ -160,13 +165,13 @@ public class BookEndpoint {
 
         User user = tokenController.getUserFromTokens(authToken);
 
-        if (user != null){
+        if (user != null && user.getUserType() == 1){
 
             if(controller.deleteBook(bookId)) {
                 return Response.status(200).entity("{\"message\":\"Success! Book deleted\"}").build();
             }
             else return Response.status(400).entity("{\"message\":\"failed\"}").build();
-        }else return Response.status(400).entity("{\"message\":\"failed\"}").build();
+        }else return Response.status(403).entity("{\"Not\":\"authorized\"}").build();
 
 
     }

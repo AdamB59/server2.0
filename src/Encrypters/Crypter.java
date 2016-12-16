@@ -4,9 +4,11 @@ import java.util.Random;
 
 public class Crypter {
 
+    //Nedenstående XOR kryptering stammer her fra:
+    //https://github.com/KyleBanks/XOREncryption/blob/master/Java%20(Android%20compatible)/XOREncryption.java
 
-    public static String encryptDecryptXOR(String input) {
-        char[] key = {'A', 'L', 'Z'}; //Dette kan være alle andre bogstaver end a,b og c.
+    public static String encryptDecryptXOR(String input, String token) {
+        char[] key = token.toCharArray() ;
         StringBuilder output = new StringBuilder();
 
         //For loop der scrambler den String, der bliver indtastet
@@ -23,8 +25,8 @@ public class Crypter {
          String communication = "test123";
 
         // Returnerer den krypterede værdi.
-        return Crypter.encryptDecryptXOR(communication) + "\n" + Crypter.encryptDecryptXOR
-                (Crypter.encryptDecryptXOR(communication));
+        return Crypter.encryptDecryptXOR(communication, "") + "\n" + Crypter.encryptDecryptXOR
+                (Crypter.encryptDecryptXOR(communication,""),"");
     }
 
 
