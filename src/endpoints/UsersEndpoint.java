@@ -28,6 +28,7 @@ public class UsersEndpoint  {
 
         User user = tokenController.getUserFromTokens(authToken);
 
+        // hent alle brugere (users)
         if (user != null && user.getUserType() == 1){
             if (controller.getUsers() != null) {
                 return Response
@@ -56,6 +57,7 @@ public class UsersEndpoint  {
 
         User user = tokenController.getUserFromTokens(authToken);
 
+        // hent én bruger (user)
         if (user != null){
             if (controller.getUser(userId)!=null) {
                 return Response
@@ -83,6 +85,7 @@ public class UsersEndpoint  {
 
         User user = tokenController.getUserFromTokens(authToken);
 
+        // ændre én bruger (edit user)
         if (user != null){
 //            String s = new Gson().fromJson(data,String.class);
 //            String decrypt = Crypter.encryptDecryptXOR(s, authToken);
@@ -115,6 +118,8 @@ public class UsersEndpoint  {
     public Response create(String data) throws Exception {
 //        String s = new Gson().fromJson(data,String.class);
 //        String decrypt = Crypter.encryptDecryptXOR(s, authToken);
+
+        // Opret en ny bruger ( create user )
         if (controller.addUser(data)) {
             //demo to check if it returns this on post.
             return Response
@@ -131,6 +136,7 @@ public class UsersEndpoint  {
 
         User user = tokenController.getUserFromTokens(authToken);
 
+        // Slet en bruger ( delete user )
         if (user != null){
             if(controller.deleteUser(userId)) {
                 return Response.status(200).entity("{\"message\":\"Success! User deleted\"}").build();
@@ -151,6 +157,7 @@ public class UsersEndpoint  {
         UserLogin userLogin = new Gson().fromJson(decrypt, UserLogin.class);
         String token = tokenController.authenticate(userLogin.getUsername(), userLogin.getPassword());
 
+        // Login med en user
         if (token != null) {
             //demo to check if it returns this on post.
             return Response
@@ -165,6 +172,7 @@ public class UsersEndpoint  {
     @POST
     @Path("/logout")
     public Response logout (String data) throws SQLException {
+        // Logud med en bruger
         if(tokenController.deleteToken(data)) {
             return Response
                     .status(200)

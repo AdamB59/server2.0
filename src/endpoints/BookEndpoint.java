@@ -24,7 +24,7 @@ public class BookEndpoint {
     public BookEndpoint() {
     }
 
-    // The Java method will process HTTP GET requests
+    // The Java method will process HTTP GET requests // beklager at serveren er så langsom!
 
     /**
      * Denne metode gør det muligt for klienten at hente en liste over bøger.
